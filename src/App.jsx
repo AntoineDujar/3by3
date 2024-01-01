@@ -1,7 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+function Request (props) {
+  // Here we define our query as a multi-line string
+  // Storing it in a separate .graphql/.gql file is also possible
+  var query = `
+  query ($id: Int) { # Define which variables will be used in the query (id)
+    Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+      id
+      title {
+        romaji
+        english
+        native
+      }
+    }
+  }
+  `;
+
+  // Define our query variables and values that will be used in the query request
+  var variables = {
+      id: 15125
+  };
+
+  // Define the config we'll need for our Api request
+  var url = 'https://graphql.anilist.co',
+      options = {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+              query: query,
+              variables: variables
+          })
+      };
+
+  // Make the HTTP Api request
+  fetch(url, options).then(handleResponse)
+                    .then(handleData)
+                    .catch(handleError);
+
+  function handleResponse(response) {
+      return response.json().then(function (json) {
+          return response.ok ? json : Promise.reject(json);
+      });
+  }
+
+  function handleData(data) {
+      console.log(data);
+  }
+
+  function handleError(error) {
+      alert('Error, check console');
+      console.error(error);
+  }
+}
 
 function App() {
   const [count, setCount] = useState(0)
@@ -9,25 +62,11 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          hello
         </p>
+        <button onClick={Request}>request</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
