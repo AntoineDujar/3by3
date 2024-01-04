@@ -31,7 +31,7 @@ function Request(props) {
 
   // Define our query variables and values that will be used in the query request
   var variables = {
-      name: "KorudoKohi",
+      name: props.username,
       page: 1,
       perPage: 9
   };
@@ -64,10 +64,8 @@ function Request(props) {
   }
 
   function handleData(data) {
-      console.log(data);
-      var example = data.data.User.favourites.anime.nodes
-      console.log(example)
-      setThreeby(example)
+      // console.log(data);
+      setThreeby(data.data.User.favourites.anime.nodes)
   }
 
   function handleError(error) {
@@ -89,12 +87,33 @@ function Request(props) {
   )
 }
 
-function App() {
+function Input (props) {
+  const handleInputChange = (event) => {
+    props.setUsername(event.target.value);
+  };
 
   return (
     <>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        placeholder="Enter username here..."
+      />
+    </>
+  );
+};
+
+function App() {
+  const [username, setUsername] = useState('');
+  
+  return (
+    <>
       <p>Anilist 3by3 recent favourites</p>
-      <Request />
+      <Input setUsername={setUsername}/>
+      <p>
+        username: {username}
+      </p>
+      <Request username={username}/>
     </>
   );
 }
