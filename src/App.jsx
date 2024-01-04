@@ -110,9 +110,6 @@ function App() {
     <>
       <p>Anilist 3by3 recent favourites</p>
       <Input setUsername={setUsername}/>
-      <p>
-        username: {username}
-      </p>
       <Request username={username}/>
     </>
   );
