@@ -88,6 +88,7 @@ function Request(props) {
 }
 
 function Input (props) {
+  // Get the value from the event and change username state
   const handleInputChange = (event) => {
     props.setUsername(event.target.value);
   };
