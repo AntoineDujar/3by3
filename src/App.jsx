@@ -1,24 +1,39 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-function Request (props) {
+function Request(props) {
+  const [threeby, setThreeby] = useState([]);
   // Here we define our query as a multi-line string
   // Storing it in a separate .graphql/.gql file is also possible
   var query = `
-  query ($id: Int) { # Define which variables will be used in the query (id)
-    Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
-      id
-      title {
-        romaji
-        english
-        native
+    query ($name: String, $page: Int, $perPage: Int) {
+      User (name: $name) {
+        id
+        name
+        favourites (page: $page) {
+          anime (page: $page, perPage: $perPage) {
+            nodes {
+              id
+              title {
+                romaji
+                english
+                native
+              }
+              coverImage {
+                medium
+              }
+            }
+          }
+          
+        }
       }
     }
-  }
   `;
 
   // Define our query variables and values that will be used in the query request
   var variables = {
-      id: 15125
+      name: "KorudoKohi",
+      page: 1,
+      perPage: 9
   };
 
   // Define the config we'll need for our Api request
@@ -36,9 +51,11 @@ function Request (props) {
       };
 
   // Make the HTTP Api request
-  fetch(url, options).then(handleResponse)
-                    .then(handleData)
-                    .catch(handleError);
+  function apiRequest () {
+    fetch(url, options).then(handleResponse)
+                      .then(handleData)
+                      .catch(handleError);
+  }
 
   function handleResponse(response) {
       return response.json().then(function (json) {
@@ -48,27 +65,38 @@ function Request (props) {
 
   function handleData(data) {
       console.log(data);
+      var example = data.data.User.favourites.anime.nodes
+      console.log(example)
+      setThreeby(example)
   }
 
   function handleError(error) {
       alert('Error, check console');
       console.error(error);
   }
-}
-
-function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <p>
-          hello
-        </p>
-        <button onClick={Request}>request</button>
-      </div>
+      <button onClick={()=>{apiRequest()}}>request</button>
+      <ul>
+          {threeby.map(item => 
+              <li key={item.id}>
+                {item.title.english}
+                <img src={item.coverImage.medium}></img>
+              </li>
+            )}
+      </ul>
     </>
   )
 }
 
-export default App
+function App() {
+
+  return (
+    <>
+      <p>Anilist 3by3 recent favourites</p>
+      <Request />
+    </>
+  );
+}
+
+export default App;
