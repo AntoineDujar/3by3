@@ -109,7 +109,7 @@ function App() {
   
   return (
     <>
-      <p>Anilist 3by3 recent favourites</p>
+      <h3>Anilist 3by3 recent favourites</h3>
       <Input setUsername={setUsername}/>
       <Request username={username}/>
     </>
