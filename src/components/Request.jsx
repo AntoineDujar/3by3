@@ -96,13 +96,17 @@ function Request(props) {
     width: '100%'
   }
 
-  const audio = new Audio('../audio/gl.mp3');
+  const audio = new Audio('/audio/gl.mp3');
 
   const handleWrapperClick = (event, index) => {
     const copy = [...divHide]
     copy[index] = "hidden"
     setDivHide(copy)
-    audio.play()
+    
+    const randomNumber = Math.floor(Math.random() * 9) + 1;
+    if (randomNumber === 1) {
+     audio.play();
+    }
   }
 
   function shuffleArray(array) {
