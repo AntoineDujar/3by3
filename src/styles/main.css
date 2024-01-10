@@ -1,0 +1,19 @@
+.wrapper {
+    position: relative;
+}
+
+.inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: lightgray;
+    z-index: 2;
+    transition: transform 125ms ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
