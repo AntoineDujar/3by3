@@ -96,10 +96,13 @@ function Request(props) {
     width: '100%'
   }
 
+  const audio = new Audio('../audio/gl.mp3');
+
   const handleWrapperClick = (event, index) => {
     const copy = [...divHide]
     copy[index] = "hidden"
     setDivHide(copy)
+    audio.play()
   }
 
   function shuffleArray(array) {
